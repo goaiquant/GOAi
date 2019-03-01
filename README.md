@@ -7,7 +7,7 @@
 <a title="Code Size" target="_blank"><img src="https://img.shields.io/badge/code%20size-7M-important.svg"></a>
 <a title="AGPLv3" target="_blank"><img src="https://img.shields.io/badge/license-AGPLv3-green.svg"></a>
 <a title="Releases" target="_blank"><img src="https://img.shields.io/badge/release-V0.1-yellow.svg"></a>
-<a title="Downloads" target="_blank"><img src="https://img.shields.io/badge/downloads-342total-blue.svg"></a>
+<a title="Downloads" target="_blank"><img src="https://img.shields.io/badge/downloads-168total-blue.svg"></a>
 </p>
 
 ## 简介
@@ -29,8 +29,8 @@ GOAi 系统是一款基于JAVA的开源量化交易系统，起源于公司自�
 * 定期举行线上线下的交流会
 ## 功能
 #### 现有功能：
-* 支持主流交易所现货http接口（okex、火币、币安、bitfinex）
-* 支持交易所WebSocket连接方式（OKEXV3 ws接口）
+* 支持主流交易所现货http接口（okexv3、火币、币安、bitfinex）
+* 支持交易所WebSocket连接方式（okexv3 ws接口）
 * 支持电报发消息通知
 * 策略的模板化封装
 #### 准备实现功能：
