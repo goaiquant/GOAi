@@ -1,0 +1,27 @@
+strategy_name: DemoStrategy           # 策略名称
+class_name: 'Demo'                    # 启动类名, 也就是策略任务类名，唯一
+configs:                              # 数组，对每个配置都进行运行task，一般情况下仅需一个配置组
+  - id: 1                             # 必须，每个配置里必须有id 以下配置项都为可选项
+    loop: 0.5                         # 多少秒定期执行 loop 函数  如不配置默认1秒。
+    telegramToken: '1234123:AAFs'    # 如需发电报通知 则需Token
+    telegramGroup: '-1232145235'     # 发电报通知用群GroupID
+    e:                                # 交易所的配置方式 如果配置名为e 则写程序的时候可以直接调用e
+      name: okexv3
+      symbol: BTC_USDT
+      access: publicKey_Passphrase   # OkexV3 需要在公钥后加 "_你的Passphrase"
+      secret: privateKey
+    huobiex:                         # 配置了一个名字为huobiex的交易所
+      name: huobipro
+      symbol: BTC_USDT
+      access: publicKey
+      secret: privateKey
+    exchanges:                      # 交易所数组的配置方式
+      - name: okexv3
+        symbol: EOS_BTC
+        access: publicKey_Passphrase
+        secret: privateKey
+      - name: huobipro
+        symbol: XRP_BTC
+        access: publicKey
+        secret: privateKey
+    myString: Hello GOAi            # 自定义字符串

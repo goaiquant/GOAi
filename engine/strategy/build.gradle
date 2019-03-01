@@ -1,0 +1,37 @@
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+//processResources {
+//   include "**/logback.xml"
+//   include "**/config**.yml"
+//}
+
+jar {
+    from { configurations.runtime.collect{zipTree(it)} }
+    baseName = 'goai'
+    manifest {
+        attributes("Main-Class": "cqt.goai.run.Application")
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+
+//    compile fileTree(dir: 'libs', includes: ['*.jar'])
+
+    compile project(":run")
+    
+
+}
+task copyJar(type:Copy){
+    from ('build\\libs')
+    into ('.')
+}

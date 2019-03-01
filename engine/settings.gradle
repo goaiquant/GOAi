@@ -1,0 +1,7 @@
+rootProject.name = 'goai'
+
+include ':model'        // model bean
+include ':exchange'     // 封装各交易所接口 http 和 websocket
+
+include ':run'          // 策略运行基础模块
+include ':strategy'     // 策略程序，java版本，结合model和exchange可以运行策略

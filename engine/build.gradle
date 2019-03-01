@@ -1,0 +1,41 @@
+buildscript {
+	repositories {
+		maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+		maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter/' }
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
+	}
+}
+
+allprojects {
+	repositories {
+		maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+		maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter/' }
+		maven { url 'https://maven.yinian.tech/public/' }
+		mavenCentral()
+	}
+	apply plugin: 'java'
+	apply plugin: 'idea'
+
+	idea {
+		module {
+			downloadSources = true
+			inheritOutputDirs = false
+			outputDir = file("build/classes/main/")
+			testOutputDir = file("build/classes/test/")
+		}
+	}
+
+	[compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	
+	dependencies {
+		annotationProcessor 'org.projectlombok:lombok:1.18.4'
+		implementation 'org.projectlombok:lombok:1.18.4'
+	}
+}
+

@@ -1,0 +1,11 @@
+.idea
+.gradle
+.run_info
+.goai
+PID
+build
+*.log
+logs
+*.csv
+*.xlsx
+.mime_cache

@@ -1,0 +1,42 @@
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+//processResources {
+//   include "**/logback.xml"
+//   include "**/config**.yml"
+//}
+
+jar {
+    from { configurations.runtime.collect{zipTree(it)} }
+    baseName = 'goai-engine'
+    manifest {
+        attributes("Main-Class": "cqt.goai.run.Application")
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+
+//    compile fileTree(dir: 'libs', includes: ['*.jar'])
+
+    compile project(":exchange")
+
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compile 'org.apache.logging.log4j:log4j-to-slf4j:2.11.1'
+    compile 'org.yaml:snakeyaml:1.19'
+    compile 'org.quartz-scheduler:quartz:2.3.0'
+
+}
+
+task copyJar(type:Copy){
+    from ('build\\libs')
+    into ('.')
+}
