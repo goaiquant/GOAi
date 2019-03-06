@@ -41,6 +41,14 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 * 图表及收益曲线的支持。
 * 多语言开发的支持 如 python、javascript 等。
 ## 界面
+## 一键启动方式
+
+**Windows**
+
+    \strategy\run_goai.bat
+
+**Linux**
+
 ## 文档
 * [API 接口文档](https://github.com/goaiquant/GOAi/wiki/GOAi-API-接口文档)
 * [telegram 通知配置说明](https://github.com/goaiquant/GOAi/wiki/电报通知配置方法)
