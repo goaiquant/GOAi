@@ -36,6 +36,7 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static cqt.goai.run.main.Const.DEFAULT_SCHEDULED_METHOD;
+import static cqt.goai.run.main.Const.LEFT_SQUARE_BRACKETS;
 import static dive.common.util.Util.exist;
 import static dive.common.util.Util.useful;
 
@@ -334,22 +335,28 @@ public class Minister {
      * 获取并配置每个配置实例
      */
     private void configs(JSONObject config) {
-        JSONArray configs = config.getJSONArray(Const.CONFIG_CONFIGS);
-        if (null == configs) {
-            throw new ExchangeException("configs in config can not be null");
-        }
-        for (int i = 0; i < configs.size(); i++) {
-            JSONObject c = configs.getJSONObject(i);
-            Integer id = c.getInteger("id");
-            if (null == id) {
-                log.error("can not mapping config, there is no id: {}", c);
-                continue;
+        String tempConfigs = config.getString(Const.CONFIG_CONFIGS);
+        if (tempConfigs.startsWith(LEFT_SQUARE_BRACKETS)) {
+            JSONArray configs = config.getJSONArray(Const.CONFIG_CONFIGS);
+            if (null == configs) {
+                throw new ExchangeException("configs in config can not be null");
             }
-            if (id < 1) {
-                log.error("can not mapping config, id can not less then 1", c);
-                continue;
+            for (int i = 0; i < configs.size(); i++) {
+                JSONObject c = configs.getJSONObject(i);
+                Integer id = c.getInteger("id");
+                if (null == id) {
+                    log.error("can not mapping config, there is no id: {}", c);
+                    continue;
+                }
+                if (id < 1) {
+                    log.error("can not mapping config, id can not less then 1", c);
+                    continue;
+                }
+                this.secretary.configs.put(id, c);
             }
-            this.secretary.configs.put(id, c);
+        } else {
+            Integer id = 1;
+            this.secretary.configs.put(id, config.getJSONObject(Const.CONFIG_CONFIGS));
         }
         log.info("config init configs size --> {}", this.secretary.configs.size());
     }
@@ -390,7 +397,6 @@ public class Minister {
         this.secretary.configs.forEach(this::checkTask);
 
         log.info("start successful. instance size: {}", this.secretary.managers.size());
-        this.secretary.managers.forEach((id, tm) -> log.info("success id: {}", id));
 
         this.updateRunInfo(this.secretary.runInfo.setRunState(RunState.STARTED));
 
@@ -586,6 +592,14 @@ public class Minister {
         if (Util.checkFile(file)) {
             Util.writeFile(file, JSON.toJSONString(info));
         }
+    }
+
+    /**
+     * 是否正在停止
+     * @return 是否正在停止
+     */
+    boolean isStopping() {
+        return this.secretary.runInfo.getRunState() == RunState.STOPPING;
     }
 
     // ==================== tools ====================

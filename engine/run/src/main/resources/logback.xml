@@ -19,6 +19,11 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5level) - [%thread] %cyan(%18logger{18}) : %msg%n</pattern>
         </encoder>
     </appender>
+    <logger name="org.quartz" additivity="false">
+        <level value="ERROR" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="TIME_FILE" />
+    </logger>
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="TIME_FILE" />

@@ -40,5 +40,7 @@ class Const {
      */
     static final String DEFAULT_SCHEDULED_METHOD = "loop";
 
+    // 魔法变量
+    static final String LEFT_SQUARE_BRACKETS = "[";
 
 }

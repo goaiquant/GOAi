@@ -43,6 +43,9 @@ class ScheduledMethod {
     }
 
     void invoke(String description) {
+        if (minister.isStopping()) {
+            return;
+        }
         try {
             if (null == lock || lock.tryLock(0, TimeUnit.MILLISECONDS)) {
                 try {

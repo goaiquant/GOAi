@@ -449,7 +449,7 @@ public class HttpExchange extends BaseExchange {
     // =============== orders ===============
 
     public final Orders getOrders(ExchangeInfo info) {
-        return this.get(info, this::ordersRequests, this::transformOrders);
+        return this.get(info, this::ordersRequests, this::parseOrders);
     }
 
     public List<MimeRequest> ordersRequests(ExchangeInfo info, long delay) {

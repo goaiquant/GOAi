@@ -183,7 +183,7 @@ public class RunTask {
      * @return 结果
      */
     protected static <T> T retry(Supplier<T> supplier) {
-        return retry(supplier, 5, 3000);
+        return retry(supplier, 5, 1000);
     }
 
 }

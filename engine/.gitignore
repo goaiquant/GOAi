@@ -2,7 +2,9 @@
 .gradle
 .run_info
 .goai
+*.iml
 PID
+node
 build
 *.log
 logs

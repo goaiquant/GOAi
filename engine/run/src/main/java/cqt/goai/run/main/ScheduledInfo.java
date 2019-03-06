@@ -84,7 +84,7 @@ class ScheduledInfo {
      */
     void setRate(long fixedRate) {
         this.fixedRate = fixedRate;
-        this.delay = 0;
+        this.delay = 3000;
         initSimpleTrigger();
     }
 
