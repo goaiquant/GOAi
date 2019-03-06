@@ -1,0 +1,60 @@
+buildscript {
+	repositories {
+		maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+		maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter/' }
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
+	}
+}
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter/' }
+    maven { url 'https://maven.yinian.tech/public/' }
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+idea {
+    module {
+        downloadSources = true
+        inheritOutputDirs = false
+        outputDir = file("build/classes/main/")
+        testOutputDir = file("build/classes/test/")
+    }
+}
+
+[compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+jar {
+    from { configurations.runtime.collect{zipTree(it)} }
+    baseName = 'strategy'
+    manifest {
+        attributes("Main-Class": "cqt.goai.run.Application")
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+
+    compile fileTree(dir: 'libs', includes: ['*.jar'])
+
+}

@@ -1,0 +1,10 @@
+build
+logs
+.gradle
+.goai
+.idea
+*.log
+*.iml
+PID
+.mime_cache
+.run_info
