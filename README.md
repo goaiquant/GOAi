@@ -41,6 +41,32 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 * 图表及收益曲线的支持。
 * 多语言开发的支持 如 python、javascript 等。
 ## 界面
+
+**登录页**
+
+![index](https://images.gitee.com/uploads/images/2019/0307/164233_cff8e1f0_2076727.png)
+
+**首页**
+
+![index](https://images.gitee.com/uploads/images/2019/0307/164231_1a8ea26c_2076727.png)
+
+**实例管理**
+
+> 在线配置参数实例
+
+![index](https://images.gitee.com/uploads/images/2019/0307/180525_1ce47b16_2076727.png)
+
+> jar包本地获取配置参数实例
+
+![index](https://images.gitee.com/uploads/images/2019/0307/164232_753a4090_2076727.png)
+
+**策略管理**
+
+![index](https://images.gitee.com/uploads/images/2019/0307/164231_51d0a7f1_2076727.png)
+
+**交易所管理**
+
+![index](https://images.gitee.com/uploads/images/2019/0307/164232_bc8a0ca2_2076727.png)
 ## 一键启动方式
 
 **Windows**
@@ -52,5 +78,11 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 ## 文档
 * [API 接口文档](https://github.com/goaiquant/GOAi/wiki/GOAi-API-接口文档)
 * [telegram 通知配置说明](https://github.com/goaiquant/GOAi/wiki/电报通知配置方法)
+
+## 社群
+* 公众号：了解最新产品动态，听策略大师、开发小哥、设计妹子吐槽吹水。
+> ![index](https://images.gitee.com/uploads/images/2019/0307/164309_109bf364_2076727.png)
+* GOAi官方QQ交流群：689620375  （群附件有GOAi使用的视频教程）
+
 ## 授权
 引擎使用 AGPLV3 开源，须严格遵守 AGPLV3 的相关条款。
