@@ -7,7 +7,7 @@
 <a title="Code Size" target="_blank"><img src="https://img.shields.io/badge/code%20size-7M-important.svg"></a>
 <a title="AGPLv3" target="_blank"><img src="https://img.shields.io/badge/license-AGPLv3-green.svg"></a>
 <a title="Releases" target="_blank"><img src="https://img.shields.io/badge/release-V0.1-yellow.svg"></a>
-<a title="Downloads" target="_blank"><img src="https://img.shields.io/badge/downloads-168total-blue.svg"></a>
+<a title="Downloads" target="_blank"><img src="https://img.shields.io/badge/downloads-199total-blue.svg"></a>
 </p>
 
 ## 简介
@@ -96,6 +96,8 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 **Linux**
 
 进入strategy目录，点击运行 `run_goai.sh` 脚本文件即可
+
+若是Centos7系统，则可下载一键启动脚本，快速安装部署并启动：`wget https://github.com/goaiquant/GOAi/releases/download/v0.0.1/goai.sh`
 
 ## 文档
 * [API 接口文档](https://github.com/goaiquant/GOAi/wiki/GOAi-API-接口文档)
