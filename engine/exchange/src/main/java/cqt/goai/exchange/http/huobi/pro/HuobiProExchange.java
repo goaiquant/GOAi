@@ -655,9 +655,13 @@ public class HuobiProExchange extends HttpExchange {
         }
         BigDecimal price = data.getBigDecimal("price");
         BigDecimal amount = data.getBigDecimal("amount");
-        BigDecimal deal = data.getBigDecimal("field-amount");
+
+        BigDecimal deal = null != data.getBigDecimal("field-amount") ?
+                data.getBigDecimal("field-amount") : data.getBigDecimal("filled-amount");
+        BigDecimal fieldCashAmount = null != data.getBigDecimal("field-cash-amount") ?
+                data.getBigDecimal("field-cash-amount") : data.getBigDecimal("filled-cash-amount");
         BigDecimal average = exist(deal) && greater(deal, ZERO) ?
-                div(data.getBigDecimal("field-cash-amount"), deal, 16) : null;
+                div(fieldCashAmount, deal, 16) : null;
         if (state == State.SUBMIT && null != deal && greater(deal, ZERO)) {
             state = State.PARTIAL;
         }

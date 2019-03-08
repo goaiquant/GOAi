@@ -18,10 +18,10 @@ if "%JAVA_HOME%"=="" (
     )
 
     ECHO JAVA环境准备就绪，开始启动GOAi服务...
-    START /B %LOCAL_JRE% -Xms64m -Xmx128m -jar %JAR_PATH% --server.port=%GOAI_PORT%
+    START /B %LOCAL_JRE% -Xms64m -Xmx250m -jar %JAR_PATH% --server.port=%GOAI_PORT%
 ) else (
     ECHO 准备启动GOAi服务...
-    START /B java -Xms64m -Xmx128m -jar %JAR_PATH% --server.port=%GOAI_PORT%
+    START /B java -Xms64m -Xmx250m -jar %JAR_PATH% --server.port=%GOAI_PORT%
 )
 
 ECHO.

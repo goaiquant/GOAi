@@ -1,5 +1,6 @@
 package cqt.goai.run.main;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import cqt.goai.model.market.Klines;
 import cqt.goai.model.market.Depth;
@@ -8,9 +9,14 @@ import cqt.goai.model.market.Trades;
 import cqt.goai.model.trade.Account;
 import cqt.goai.model.trade.Orders;
 import cqt.goai.run.exchange.Exchange;
+import dive.cache.mime.PersistCache;
+import dive.common.util.DateUtil;
 import dive.common.util.TryUtil;
 import org.slf4j.Logger;
 
+import java.io.*;
+import java.util.Date;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,6 +36,10 @@ public class RunTask {
      */
     final Supplier<Boolean> isReady = () -> this.ready;
 
+    /**
+     * 原始日志工具
+     */
+    private Logger originLog;
 
     /**
      * 用户日志
@@ -76,6 +86,7 @@ public class RunTask {
      * @param config 实例配置
      */
     void init(String strategyName, Integer id, JSONObject config, Logger log) {
+        this.originLog = log;
         this.log = new UserLogger(log);
         this.notice = new Notice(log, config.getString("telegramGroup"), config.getString("telegramToken"));
         this.strategyName = strategyName;
@@ -145,7 +156,7 @@ public class RunTask {
      * 睡眠一段时间
      * @param millis 毫秒
      */
-    protected static void sleep(long millis) {
+    protected void sleep(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -161,8 +172,8 @@ public class RunTask {
      * @param <T> 结果对象
      * @return 结果
      */
-    protected static <T> T retry(Supplier<T> supplier, int times, long millis) {
-        return TryUtil.retry(supplier, times, () -> sleep(millis));
+    protected <T> T retry(Supplier<T> supplier, int times, long millis) {
+        return TryUtil.retry(supplier, times, () -> this.sleep(millis));
     }
 
     /**
@@ -172,7 +183,7 @@ public class RunTask {
      * @param <T> 结果对象
      * @return 结果
      */
-    protected static <T> T retry(Supplier<T> supplier, int times) {
+    protected <T> T retry(Supplier<T> supplier, int times) {
         return retry(supplier, times, 3000);
     }
 
@@ -182,8 +193,141 @@ public class RunTask {
      * @param <T> 结果对象
      * @return 结果
      */
-    protected static <T> T retry(Supplier<T> supplier) {
+    protected <T> T retry(Supplier<T> supplier) {
         return retry(supplier, 5, 1000);
     }
 
+
+    // ============================
+
+    /**
+     * 全局持久化
+     */
+    private static final PersistCache<String, Serializable> PERSIST_CACHE = new PersistCache<>(".global");
+
+    /**
+     * 全局保存
+     * @param key 键
+     * @param value 值
+     */
+    protected void global(String key, Serializable value) {
+        PERSIST_CACHE.set(key, value);
+    }
+
+    /**
+     * 读取值
+     * @param key 键
+     * @param <T> 值类型
+     * @return 读取的值
+     */
+    @SuppressWarnings("unchecked")
+    protected <T> T global(String key) {
+        return (T) PERSIST_CACHE.get(key);
+    }
+
+    /**
+     * 持久化缓存
+     */
+    private PersistCache<String, Serializable> persistCache;
+
+    /**
+     * 初始化缓存
+     */
+    private void initPersistCache() {
+        if (null == this.persistCache) {
+            synchronized (this) {
+                if (null == this.persistCache) {
+                    this.persistCache = new PersistCache<>(".global_" + id);
+                }
+            }
+        }
+    }
+
+    /**
+     * 实例内保存
+     * @param key 键
+     * @param value 值
+     */
+    protected void store(String key, Serializable value) {
+        this.initPersistCache();
+        this.persistCache.set(key, value);
+    }
+
+    /**
+     * 读取值
+     * @param key 键
+     * @param <T> 值类型
+     * @return 读取的值
+     */
+    @SuppressWarnings("unchecked")
+    protected <T> T store(String key) {
+        this.initPersistCache();
+        return (T) this.persistCache.get(key);
+    }
+
+    /**
+     * 实时信息保存路径
+     */
+    private static final String PATH_REALTIME = ".realtime";
+    static {
+        File file = new File(PATH_REALTIME);
+        if (!file.exists()) {
+            boolean result = file.mkdir();
+            if (!result) {
+                throw new RuntimeException("can not create dir: " + PATH_REALTIME);
+            }
+        }
+    }
+
+    /**
+     * 存储实时信息
+     * @param key 键
+     * @param value 值
+     */
+    protected void realtime(String key, Object value) {
+        String message = JSON.toJSONString(value);
+        File file = new File(PATH_REALTIME + "/" + key);
+        if (!file.exists()) {
+            try {
+                boolean result = file.createNewFile();
+                if (!result) {
+                    throw new RuntimeException("can not create file: " + file.getPath());
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        FileOutputStream os = null;
+        try {
+            os = new FileOutputStream(file, false);
+            os.write(message.getBytes());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } finally {
+            if (null != os) {
+                try {
+                    os.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 输出盈利的时间序列数据
+     * @param profit 盈利
+     */
+    protected void profit(double profit) {
+        String date = DateUtil.formatISO8601(new Date());
+        String p = String.format("% 8.8f", profit);
+        String message = date + " " + p;
+        this.originLog.info("PROFIT {}", message);
+        File file = new File(",profit");
+        try (FileWriter fw = new FileWriter(file, true)){
+            fw.write(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -11,3 +11,5 @@ logs
 *.csv
 *.xlsx
 .mime_cache
+.realtime
+.profit

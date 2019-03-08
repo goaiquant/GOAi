@@ -21,7 +21,7 @@ COUNT=`ps -ef|grep -w java|grep -w "\-jar"|grep -w "${JAR_PATH}"|grep -v grep | 
 if [ $COUNT -gt 0 ]; then
     echo "GOAi服务正在运行中，无需再次启动"
 else
-    nohup java -Xms64m -Xmx128m -jar ${JAR_PATH} --server.port=${GOAI_PORT} > /dev/null 2>&1 &
+    nohup java -Xms64m -Xmx250m -jar ${JAR_PATH} --server.port=${GOAI_PORT} > /dev/null 2>&1 &
 
     echo "GOAi服务已开启，若需开启远程访问，请先确保开放对应端口及设置防火墙"
 fi
