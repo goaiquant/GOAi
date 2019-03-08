@@ -1,6 +1,6 @@
 <p align = "center">
 <img alt="Sym" src="https://images.gitee.com/uploads/images/2019/0301/103718_0b0df56e_1088279.png">
-<br><br>
+<br><b>
 新一代的量化系统，为交易而构建
 <br><br>
 <a title="Build Status" target="_blank"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg"></a>
@@ -44,7 +44,7 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 
 **登录页**
 
-![index](https://images.gitee.com/uploads/images/2019/0307/164233_cff8e1f0_2076727.png)
+![index](https://images.gitee.com/uploads/images/2019/0308/174439_8af709ba_2076727.png)
 
 **首页**
 
@@ -67,6 +67,10 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 **交易所管理**
 
 ![index](https://images.gitee.com/uploads/images/2019/0307/164232_bc8a0ca2_2076727.png)
+
+**策略模板**
+
+![index](https://raw.githubusercontent.com/zq33/TP/master/%E9%A1%B5%E9%9D%A2%E6%88%AA%E5%9B%BE/%E7%AD%96%E7%95%A5%E6%A8%A1%E6%9D%BF.png)
 
 
 ## 环境要求
