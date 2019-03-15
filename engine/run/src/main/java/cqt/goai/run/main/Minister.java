@@ -17,6 +17,9 @@ import cqt.goai.model.other.RunState;
 import cqt.goai.run.Application;
 import cqt.goai.run.annotation.Scheduled;
 import cqt.goai.run.annotation.ScheduledScope;
+import cqt.goai.run.notice.BaseNotice;
+import cqt.goai.run.notice.EmailNotice;
+import cqt.goai.run.notice.TelegramNotice;
 import dive.common.crypto.AESUtil;
 import dive.common.crypto.DHUtil;
 import dive.http.common.MimeRequest;
@@ -112,6 +115,7 @@ public class Minister {
          */
         boolean ready = false;
 
+        private List<BaseNotice> notices;
     }
 
     private Minister() {} // 私有构造器
@@ -213,9 +217,6 @@ public class Minister {
                     return new JSONObject();
                 }
                 JSONObject json = JSONObject.parseObject(response);
-                if (json.containsKey("run_mode") && "debug".equals(json.getString("run_mode"))) {
-                    log.debug(response);
-                }
                 if(json.getInteger("code") != 200){
                     log.info("response data error ---> {}", response);
                     return new JSONObject();
@@ -225,7 +226,12 @@ public class Minister {
                 pubKey = new String(Base64.getDecoder().decode(pubKey));
                 String configs = AESUtil.aesDecryptByBase64(json.getString("data"),
                         DHUtil.aesKeyToBase64(pubKey, keys[1]));
-
+                if (json.containsKey("run_mode") && "debug".equals(json.getString("run_mode"))) {
+                    log.info("configs -> {}", configs);
+                }
+                if (new File("debug").exists()) {
+                    log.info("configs -> {}", configs);
+                }
                 return JSON.parseObject(configs);
             }
         }
@@ -299,6 +305,8 @@ public class Minister {
         // 获取简单的配置
         this.configSimple(config);
 
+        this.configNotices(config);
+
         // 获取每个实例的运行配置
         this.configs(config);
     }
@@ -332,6 +340,25 @@ public class Minister {
     }
 
     /**
+     * 获取通知配置
+     * @param config 配置
+     */
+    private void configNotices(JSONObject config) {
+        this.secretary.notices = new LinkedList<>();
+        if (config.containsKey("notices")) {
+            JSONArray ns = config.getJSONArray("notices");
+            for (int i = 0; i < ns.size(); i++) {
+                JSONObject c = ns.getJSONObject(i);
+                switch (c.getString("type")) {
+                    case "email" : this.secretary.notices.add(new EmailNotice(log, this.secretary.strategyName, c)); break;
+                    case "telegram" : this.secretary.notices.add(new TelegramNotice(log, this.secretary.strategyName, c)); break;
+                    default:
+                }
+            }
+        }
+    }
+
+    /**
      * 获取并配置每个配置实例
      */
     private void configs(JSONObject config) {
@@ -352,15 +379,32 @@ public class Minister {
                     log.error("can not mapping config, id can not less then 1", c);
                     continue;
                 }
+                if (0 == i) {
+                    this.getNotices(c);
+                }
                 this.secretary.configs.put(id, c);
             }
         } else {
             Integer id = 1;
-            this.secretary.configs.put(id, config.getJSONObject(Const.CONFIG_CONFIGS));
+            JSONObject c = config.getJSONObject(Const.CONFIG_CONFIGS);
+            this.getNotices(c);
+            this.secretary.configs.put(id, c);
         }
         log.info("config init configs size --> {}", this.secretary.configs.size());
     }
 
+    /**
+     * 兼容以前的配置
+     * @param config 配置
+     */
+    private void getNotices(JSONObject config) {
+        if (config.containsKey("telegramGroup")) {
+            JSONObject c = new JSONObject();
+            c.put("token", config.getString("telegramToken"));
+            c.put("chatId", config.getString("telegramGroup"));
+            this.secretary.notices.add(new TelegramNotice(log, this.secretary.strategyName,c));
+        }
+    }
 
     /**
      * 运行程序
@@ -490,7 +534,7 @@ public class Minister {
             RunTask runTask = (RunTask) this.secretary.taskClass.newInstance();
             // 统一的配置从这里设置
             Logger log = this.initLog(id);
-            runTask.init(this.secretary.strategyName, id, config, log);
+            runTask.init(this.secretary.strategyName, id, config, log, this.secretary.notices);
             manager = new TaskManager(id, runTask, log,
                     this.secretary.methods.stream().map(MethodInfo::copy).collect(Collectors.toList()),
                     this.secretary.debug);

@@ -160,13 +160,15 @@ class TaskManager {
         injectMap.put((t) -> t == Double.class, Double::valueOf);
         injectMap.put((t) -> "double".equals(t.getName()), Double::valueOf);
         injectMap.put((t) -> t == Integer.class, Integer::valueOf);
-        injectMap.put((t) -> "int".equals(t.getName()), Integer::valueOf);
+        injectMap.put((t) -> "int".equals(t.getName()), c -> new BigDecimal(c).intValue());
         injectMap.put((t) -> t == Long.class, Long::valueOf);
-        injectMap.put((t) -> "long".equals(t.getName()), Long::valueOf);
+        injectMap.put((t) -> "long".equals(t.getName()), c -> new BigDecimal(c).longValue());
         injectMap.put((t) -> t == String.class, s -> s);
         injectMap.put((t) -> t == JSONObject.class, JSON::parseObject);
         injectMap.put((t) -> t == JSONArray.class, JSON::parseArray);
         injectMap.put((t) -> t == BigDecimal.class, BigDecimal::new);
+        injectMap.put((t) -> t == Boolean.class, Boolean::valueOf);
+        injectMap.put((t) -> "boolean".equals(t.getName()), Boolean::valueOf);
     }
 
     /**
@@ -176,7 +178,7 @@ class TaskManager {
         if (!exist(this.config)) {
             return;
         }
-        next:
+        NEXT:
         for (String key : this.config.keySet()) {
             try {
                 Field field = this.taskClass.getDeclaredField(key);
@@ -193,7 +195,7 @@ class TaskManager {
                     if (condition.apply(type)) {
                         field.set(this.runTask, change.apply(content));
                         this.log.info("inject field {} : {}", key, content);
-                        continue next;
+                        continue NEXT;
                     }
                 }
 

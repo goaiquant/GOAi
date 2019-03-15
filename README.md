@@ -91,13 +91,18 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 
 **Windows**
 
-进入strategy目录，点击运行 `run_goai.bat` 脚本文件即可
++ 进入strategy目录，点击运行 `run_goai.bat` 脚本文件即可
 
 **Linux**
 
-进入strategy目录，点击运行 `run_goai.sh` 脚本文件即可
++ 进入strategy目录，点击运行 `run_goai.sh` 脚本文件即可
 
-若是Centos7系统，则可下载一键启动脚本，快速安装部署并启动：`wget https://github.com/goaiquant/GOAi/releases/download/v0.0.1/goai.sh`
+若是Centos7系统(更多系统支持敬请期待)，则可下载[一键安装启动脚本](https://github.com/goaiquant/GOAi/releases/tag/v0.0.1)，快速安装部署并启动：
++ 使用root身份登录Linux服务器
++ 切换到root目录：`cd /root`
++ 下载一键安装启动脚本：`wget https://github.com/goaiquant/GOAi/releases/download/v0.0.1/goai.sh`
++ 运行脚本进行安装或管理：`bash goai.sh`
++ 按照窗口提示输入对应命令序号进行操作即可
 
 ## 文档
 * [API 接口文档](https://github.com/goaiquant/GOAi/wiki/GOAi-API-接口文档)

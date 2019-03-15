@@ -1,9 +1,18 @@
 strategy_name: Tutorial01             # 策略名称
 class_name: 'tutorial.Tutorial02'     # 启动类名, 也就是策略任务类名，唯一
+notices:
+  - type: email
+    #    mailSmtpHost: 'smtp.exmail.qq.com'
+    #    mailSmtpPort: '465'
+    #    mailSmtpSocketFactoryPort: '465'
+    username: 'xxx@xxx.com'
+    password: 'password'
+    to: 'you@yourmail.com'
+  - type: telegram
+    token: '1234123:AAFs'    # 如需发电报通知 则需Token
+    chatId: '-1232145235'     # 发电报通知用群GroupID
 configs:                              # 策略配置需要的参数
     loop: 0.5                         # 多少秒定期执行 loop 函数  如不配置默认1秒。
-    telegramToken: '1234123:AAFs'    # 如需发电报通知 则需Token
-    telegramGroup: '-1232145235'     # 发电报通知用群GroupID
     e:                                # 交易所的配置方式 如果配置名为e 则写程序的时候可以直接调用e
       name: okexv3
       symbol: BTC_USDT

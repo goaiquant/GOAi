@@ -2,13 +2,15 @@ package cqt.goai.run.main;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import cqt.goai.model.market.Klines;
 import cqt.goai.model.market.Depth;
+import cqt.goai.model.market.Klines;
 import cqt.goai.model.market.Ticker;
 import cqt.goai.model.market.Trades;
 import cqt.goai.model.trade.Account;
 import cqt.goai.model.trade.Orders;
 import cqt.goai.run.exchange.Exchange;
+import cqt.goai.run.notice.BaseNotice;
+import cqt.goai.run.notice.Notice;
 import dive.cache.mime.PersistCache;
 import dive.common.util.DateUtil;
 import dive.common.util.TryUtil;
@@ -16,7 +18,9 @@ import org.slf4j.Logger;
 
 import java.io.*;
 import java.util.Date;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -85,10 +89,10 @@ public class RunTask {
      * @param id 实例id
      * @param config 实例配置
      */
-    void init(String strategyName, Integer id, JSONObject config, Logger log) {
+    void init(String strategyName, Integer id, JSONObject config, Logger log, List<BaseNotice> notices) {
         this.originLog = log;
         this.log = new UserLogger(log);
-        this.notice = new Notice(log, config.getString("telegramGroup"), config.getString("telegramToken"));
+        this.notice = new Notice(log, notices);
         this.strategyName = strategyName;
         this.id = id;
         this.config = config;
@@ -284,7 +288,7 @@ public class RunTask {
      * @param key 键
      * @param value 值
      */
-    protected void realtime(String key, Object value) {
+    protected void show(String key, Object value) {
         String message = JSON.toJSONString(value);
         File file = new File(PATH_REALTIME + "/" + key);
         if (!file.exists()) {
@@ -315,17 +319,43 @@ public class RunTask {
     }
 
     /**
+     * 默认值保存的实时信息
+     * @param value 值
+     */
+    protected void show(String value) {
+        Map<String, String> map = new HashMap<>(2);
+        map.put("type", "string");
+        map.put("value", value);
+        this.show(".default", map);
+    }
+
+    /**
+     * 默认值保存的实时表格信息
+     * @param comment 描述信息
+     * @param headers 表头
+     * @param lists 每一行
+     */
+    protected void show(String comment, List<String> headers, List<Object>... lists) {
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("type", "table");
+        map.put("comment", comment);
+        map.put("header", headers);
+        map.put("value", lists);
+        this.show(".default", map);
+    }
+
+    /**
      * 输出盈利的时间序列数据
      * @param profit 盈利
      */
     protected void profit(double profit) {
         String date = DateUtil.formatISO8601(new Date());
-        String p = String.format("% 8.8f", profit);
+        String p = String.format("%8.8f", profit);
         String message = date + " " + p;
         this.originLog.info("PROFIT {}", message);
-        File file = new File(",profit");
+        File file = new File(".profit");
         try (FileWriter fw = new FileWriter(file, true)){
-            fw.write(message);
+            fw.write(message + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

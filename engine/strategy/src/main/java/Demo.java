@@ -1,7 +1,7 @@
-import cqt.goai.model.enums.Period;
 import cqt.goai.model.market.Ticker;
-import cqt.goai.run.exchange.Exchange;
 import cqt.goai.run.main.RunTask;
+import cqt.goai.run.notice.NoticeType;
+
 import static dive.common.util.Util.exist;
 
 /**
@@ -20,7 +20,9 @@ public class Demo extends RunTask {
      */
     @Override
     protected void init() {
+
         log.info("myString --> {}",myString);
+
     }
 
     /**

@@ -12,7 +12,7 @@ dependencies {
     compile project(':model')
 
     compile 'dive:common:0.0.1'
-    compile 'dive:cache-mime:0.0.1'
+    compile 'dive:cache-mime:0.0.2'
     compile 'dive:http-okhttp:0.0.1'
     compile 'com.squareup.okhttp3:okhttp:3.11.0'
 
