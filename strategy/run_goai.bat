@@ -2,16 +2,16 @@
 chcp 65001
 TITLE 运行GOAi服务
 
-SET JAR_PATH=%cd%\application\web.jar
+SET JAR_PATH="%cd%\application\web.jar"
 SET GOAI_PORT=7758
 
-SET LOCAL_JRE=%cd%\libs\jre1.8.0_171\bin\java
+SET LOCAL_JRE="%cd%\libs\jre1.8.0_171\bin\java"
 
 REM 检测安装JAVA环境
 if "%JAVA_HOME%"=="" (
-    SET LOCAL_JRE=%cd%\libs\jre1.8.0_171\bin\java
+    SET LOCAL_JRE="%cd%\libs\jre1.8.0_171\bin\java.exe"
 
-    if not exist %LOCAL_JRE%.exe (
+    if not exist %LOCAL_JRE% (
         ECHO 请先安装JDK环境
         PAUSE
         EXIT
