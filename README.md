@@ -112,6 +112,9 @@ GOAi 是一款基于JAVA的开源量化交易系统，起源于公司自研量�
 * [API 接口文档](https://github.com/goaiquant/GOAi/wiki/GOAi-API-接口文档)
 * [telegram 通知配置说明](https://github.com/goaiquant/GOAi/wiki/电报通知配置方法)
 
+## 使用IDEA 打开工程写策略
+* [IDE打开工程并写策略方法](http://note.youdao.com/noteshare?id=cce22cf28f89ffcba66c758c38756b13)
+
 ## 社群
 * 公众号：了解最新产品动态，听策略大师、开发小哥、设计妹子吐槽吹水。
 > ![index](https://images.gitee.com/uploads/images/2019/0307/164309_109bf364_2076727.png)
