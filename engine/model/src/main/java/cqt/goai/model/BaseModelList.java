@@ -3,6 +3,7 @@ package cqt.goai.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,12 +20,12 @@ import java.util.stream.Stream;
  */
 @Getter
 @EqualsAndHashCode
-public abstract class BaseModelList<E extends To> implements To, Iterable<E> {
-
+public abstract class BaseModelList<E extends To> implements To, Iterable<E>, Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 底层数据
      */
-    private final List<E> list;
+    private List<E> list;
 
     /**
      * 构造器传入list对象，可选择ArrayList或LinkedList，看情况选择
@@ -103,6 +104,14 @@ public abstract class BaseModelList<E extends To> implements To, Iterable<E> {
 
     public E getLast() {
         return this.last();
+    }
+
+    public void add(E e) {
+        this.list.add(e);
+    }
+
+    public void set(List<E> eList) {
+        this.list = eList;
     }
 
     @Override
